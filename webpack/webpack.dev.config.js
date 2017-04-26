@@ -8,37 +8,46 @@ module.exports = {
 	devtool: 'inline-source-map',
 	context: path.resolve(__dirname, '..'),
 	entry: {
-		bundle: [
-			'../src/client.js',
-			'webpack/hot/webpack-dev-server',
-			`webpack-dev-server/client?http://${HOST}:${PORT}/`
+		main: [
+			'./src/client.js',
+			'webpack/hot/only-dev-server',
+			`webpack-dev-server/client?http://${HOST}:${PORT}`
 		],
-		vendor: [
-			'react',
-			'react-dom'
+		react: [
+			"react"
+		],
+		reactdom: [
+			"react-dom/dist/react-dom.min"
 		]
 	},
 	output: {
 		path: path.resolve(__dirname, '../dist'),
 		publicPath: '/dist/',
-		filename: 'bundle.js'
+		filename: '[name].js'
 	},
 	module: {
 		rules: [{
 			test: /\.jsx?$/,
 			exclude: /node_modules/,
 			use: 'babel-loader'
+		}, {
+			test: /\.css|scss$/,
+			exclude: /node_modules/,
+			use: ['style-loader', 'css-loader']
 		}]
 	},
 	plugins: [
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.optimize.CommonsChunkPlugin({
-			names: ['vendor', 'manifest'],
-			minChunks: Infinity
+			names: ['react', 'reactdom', 'manifest'],
+			filename: '[name].js',
+			minChunks: 2
 		}),
-		new webpack.DefinePlugin({
+		
+		// new webpack.optimize.UglifyJsPlugin(),
+		// new webpack.DefinePlugin({
 
-		})
+		// })
 	],
 	resolve: {
 		extensions: ['.js', '.jsx', '.json']

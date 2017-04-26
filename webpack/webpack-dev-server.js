@@ -1,8 +1,8 @@
-import WebpackDevServer from 'webapck-dev-server';
-import webpack from 'webpack';
+var WebpackDevServer = require('webpack-dev-server');
+var webpack = require('webpack');
 
 const PORT = (+process.env.PORT) || 3000;
-const webpackConfig = require('./webpack.dev.confg');
+const webpackConfig = require('./webpack.dev.config');
 const compiler = webpack(webpackConfig);
 const server = new WebpackDevServer(compiler, {
 	inline: true,
