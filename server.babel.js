@@ -1,5 +1,5 @@
 var fs = require('fs');
-var babelrc = fs.fs.readFileSync('./.babelrc');
+var babelrc = fs.readFileSync('./.babelrc');
 var config = null;
 try {
 	config = JSON.parse(babelrc);

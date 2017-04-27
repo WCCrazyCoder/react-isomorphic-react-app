@@ -1,8 +1,11 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin')
+const webpackIsomorphicToolsPlugin = new Webpack_isomorphic_tools_plugin(require('./webpack-isomorphic-tools')).development(process.env.NODE_ENV === 'development');
 
 const HOST = (process.env.HOST || 'localhost');
-const PORT = (+process.env.PORT) || 3000;
+const PORT = (+process.env.PORT + 1) || 3001;
 
 module.exports = {
 	devtool: 'inline-source-map',
@@ -11,19 +14,18 @@ module.exports = {
 		main: [
 			'./src/client.js',
 			'webpack/hot/only-dev-server',
-			`webpack-dev-server/client?http://${HOST}:${PORT}`
+			`webpack-dev-server/client?http://${HOST}:${PORT}/`
 		],
-		react: [
-			"react"
-		],
-		reactdom: [
-			"react-dom/dist/react-dom.min"
+		vendor: [
+			"react",
+			"react-dom"
 		]
 	},
 	output: {
 		path: path.resolve(__dirname, '../dist'),
 		publicPath: '/dist/',
-		filename: '[name].js'
+		chunkFilename: '[name].[chunkhash].min.js',
+		filename: '[name].[hash].min.js'
 	},
 	module: {
 		rules: [{
@@ -31,23 +33,40 @@ module.exports = {
 			exclude: /node_modules/,
 			use: 'babel-loader'
 		}, {
-			test: /\.css|scss$/,
+			test: /\.(css|scss)$/,
 			exclude: /node_modules/,
-			use: ['style-loader', 'css-loader']
+			use: ExtractTextPlugin.extract({
+				fallback: 'style-loader',
+				use: ['css-loader?importLoaders=2&modules=true&camelCase=true&sourceMap=true&localIdentName=[name]__[local]--[hash:base64:5]', 'sass-loader', 'postcss-loader']
+			})
+		}, {
+			test: webpackIsomorphicToolsPlugin.regular_expression('images'),
+			exclude: /node_modules/,
+			use: ['file-loader', 'url-loader?limit=10240']
 		}]
 	},
 	plugins: [
+		webpackIsomorphicToolsPlugin,
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.optimize.CommonsChunkPlugin({
-			names: ['react', 'reactdom', 'manifest'],
-			filename: '[name].js',
-			minChunks: 2
+			names: ['vendor', 'manifest'],
+			filename: '[name].[hash].min.js',
+			minChunks: Infinity
 		}),
-		
-		// new webpack.optimize.UglifyJsPlugin(),
-		// new webpack.DefinePlugin({
-
-		// })
+		new ExtractTextPlugin({
+			filename: '[name].[contenthash].css'
+		}),
+		new webpack.DefinePlugin({
+			'process.env': {
+				NODE_ENV: JSON.stringify('development'),
+				BABEL_ENV: JSON.stringify('development')
+			},
+			__CLIENT__: true,
+			__SERVER__: false,
+			__PRODUCTION__: false,
+			__DEVELOPMENT__: true,
+			__DEVTOOLS__: true
+		})
 	],
 	resolve: {
 		extensions: ['.js', '.jsx', '.json']
