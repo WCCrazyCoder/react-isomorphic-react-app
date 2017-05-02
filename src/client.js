@@ -1,26 +1,21 @@
-require('./client.css');
-const style = require('./test.scss');
-
-// es6 work.
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Message from './messages';
-const message = () => `<h1>${Message.message}</h1>`;
+import { createStore } from 'redux'
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import configureStore from './common/store/configureStore';
+import routes from './routes';
 
-const app = document.getElementById('app');
-// app.innerHTML = message();
+const preloadedState = window.__redux_data__;
+const store = configureStore(preloadedState);
 
-function HelloWorld(props) {
-	return (
-		<h1 className={style.title}> 
-			Hello World ASD
-		</h1>
-	);
-}
-
-ReactDOM.render(<HelloWorld />, app);
-
-
-if (module.hot) {
-	module.hot.accept();
-}
+const component = (
+	<Provider store={store} key="provider">
+		<BrowserRouter>
+			<div>
+				{ routes(store) }
+			</div>
+		</BrowserRouter>
+	</Provider>
+);
+ReactDOM.render(component, document.getElementById('app'));

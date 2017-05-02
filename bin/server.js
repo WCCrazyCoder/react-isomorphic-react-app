@@ -1,4 +1,4 @@
-require('../server.babel');
+require('babel-register');
 
 var path = require('path');
 var rootDir = path.resolve(__dirname, '..');

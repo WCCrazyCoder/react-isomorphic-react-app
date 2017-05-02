@@ -23,9 +23,9 @@ module.exports = {
 	},
 	output: {
 		path: path.resolve(__dirname, '../dist'),
-		publicPath: '/dist/',
+		publicPath: `http://${HOST}:${PORT}/dist/`,
 		chunkFilename: '[name].[chunkhash].min.js',
-		filename: '[name].[hash].min.js'
+		filename: '[name].min.js'
 	},
 	module: {
 		rules: [{
@@ -50,11 +50,11 @@ module.exports = {
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.optimize.CommonsChunkPlugin({
 			names: ['vendor', 'manifest'],
-			filename: '[name].[hash].min.js',
+			filename: '[name].min.js',
 			minChunks: Infinity
 		}),
 		new ExtractTextPlugin({
-			filename: '[name].[contenthash].css'
+			filename: '[name].css'
 		}),
 		new webpack.DefinePlugin({
 			'process.env': {

@@ -11,10 +11,12 @@ const server = new WebpackDevServer(compiler, {
 	inline: true,
 	hot: true,
 	publicPath: webpackConfig.output.publicPath,
+	headers: { 'Access-Control-Allow-Origin': '*' },
 	stats: {
 		colors: true
 	}
 });
+
 server.listen(PORT, (err) => {
 	if (err) {
 		console.error(err);

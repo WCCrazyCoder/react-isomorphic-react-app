@@ -1,1 +1,1 @@
-{"javascript":{"vendor":"/dist/vendor.30728dcd2e81140d3bba.min.js","main":"/dist/main.30728dcd2e81140d3bba.min.js","manifest":"/dist/manifest.30728dcd2e81140d3bba.min.js"},"styles":{"main":"/dist/main.55c431b3c4a6be9560430c1678671494.css"},"assets":{}}
+{"javascript":{"vendor":"http://localhost:3001/dist/vendor.min.js","main":"http://localhost:3001/dist/main.min.js","manifest":"http://localhost:3001/dist/manifest.min.js"},"styles":{},"assets":{}}
