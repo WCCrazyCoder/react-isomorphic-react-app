@@ -15,9 +15,6 @@ export default class Html extends React.Component {
 				<body>
 					<div id="app" dangerouslySetInnerHTML={{ __html: app }} />
 					<script dangerouslySetInnerHTML={{  __html: `window.__redux_data__=${serialize(store.getState())};` }} charSet="urt-8" />
-					<script src="http://localhost:3001/dist/manifest.min.js" charSet="urt-8" />
-					<script src="http://localhost:3001/dist/vendor.min.js" charSet="urt-8" />
-					<script src="http://localhost:3001/dist/main.min.js" charSet="urt-8" />
 				</body>
 			</html>
 		);

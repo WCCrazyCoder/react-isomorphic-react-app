@@ -23,7 +23,6 @@ export default function configureStore(preloadedState={}) {
 	}
 
 	if (module.hot) {
-		console.log('aaa');
 		// module.hot.accept('../../redux/modules/reducers', () => {
 		// 	const nextRooterReducer = require('../../redux/modules/reducers');
 		// 	store.replaceReducer(nextRooterReducer);
